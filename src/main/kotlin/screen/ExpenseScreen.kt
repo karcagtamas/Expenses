@@ -11,7 +11,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 
-data class ExpenseScreen(val id: Int) : Screen {
+data class ExpenseScreen(val id: String) : Screen {
 
     @Composable
     override fun Content() {

@@ -5,13 +5,12 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
-import screen.HomeScreen
+import kotlinx.coroutines.runBlocking
+import screen.home.HomeScreen
 
 @Composable
 @Preview
 fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
-
     MaterialTheme {
         Navigator(HomeScreen()) { navigator ->
             SlideTransition(navigator)
@@ -19,8 +18,10 @@ fun App() {
     }
 }
 
-fun main() = application {
-    Window(onCloseRequest = ::exitApplication, title = "Expenses") {
-        App()
+fun main() = runBlocking {
+    application {
+        Window(onCloseRequest = ::exitApplication, title = "Expenses") {
+            App()
+        }
     }
 }
