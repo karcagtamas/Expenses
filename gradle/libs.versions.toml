@@ -1,0 +1,6 @@
+[versions]
+voyager = "1.1.0-beta02"
+
+[libraries]
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
