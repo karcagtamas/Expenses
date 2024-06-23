@@ -20,9 +20,9 @@ import components.ExpenseItem
 import models.Category
 import models.Expense
 import screen.ExpenseScreen
+import screen.edit.EditScreen
 import java.math.BigDecimal
 import java.util.*
-import kotlin.random.Random
 
 class HomeScreen : Screen {
 
@@ -40,7 +40,7 @@ class HomeScreen : Screen {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth().padding(4.dp),
+                    modifier = Modifier.fillMaxWidth().padding(2.dp),
                 ) {
                     Text(
                         text = "Expenses",
@@ -50,11 +50,14 @@ class HomeScreen : Screen {
                     )
 
                     IconButton(onClick = {
-                        viewModel.add(
-                            Expense(
-                                UUID.randomUUID().toString(),
-                                BigDecimal(Random.nextInt()),
-                                Category.OUTCOME
+                        navigator.push(
+                            EditScreen(
+                                Expense(
+                                    UUID.randomUUID().toString(),
+                                    BigDecimal(0),
+                                    Category.INCOME
+                                ),
+                                false
                             )
                         )
                     }) {
@@ -68,7 +71,9 @@ class HomeScreen : Screen {
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 items(viewModel.expenses.value.size) { index ->
-                    ExpenseItem(viewModel.expenses.value[index]) {
+                    ExpenseItem(viewModel.expenses.value[index], onEdit = {
+                        navigator.push(EditScreen(it, true))
+                    }) {
                         navigator.push(ExpenseScreen(it.id))
                     }
                 }
