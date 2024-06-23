@@ -20,4 +20,10 @@ class HomeViewModel : ScreenModel {
             _expenses.value = listOf(Expense("alma", BigDecimal(12), Category.INCOME))
         }
     }
+
+    fun add(expense: Expense) {
+        screenModelScope.launch {
+            _expenses.value = _expenses.value.plus(expense)
+        }
+    }
 }

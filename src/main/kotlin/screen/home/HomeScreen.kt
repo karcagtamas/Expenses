@@ -1,12 +1,17 @@
 package screen.home
 
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -16,7 +21,7 @@ import models.Category
 import models.Expense
 import screen.ExpenseScreen
 import java.math.BigDecimal
-import java.util.UUID
+import java.util.*
 import kotlin.random.Random
 
 class HomeScreen : Screen {
@@ -27,27 +32,45 @@ class HomeScreen : Screen {
 
         val viewModel = rememberScreenModel { HomeViewModel() }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item {
-                Button(onClick = {
-                    /*viewModel.expenses.plus(
-                        Expense(
-                            UUID.randomUUID().toString(),
-                            BigDecimal(Random.nextInt()),
-                            Category.INCOME
+            Card {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth().padding(4.dp),
+                ) {
+                    Text(
+                        text = "Expenses",
+                        fontSize = TextUnit(1.6f, TextUnitType.Em),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    IconButton(onClick = {
+                        viewModel.add(
+                            Expense(
+                                UUID.randomUUID().toString(),
+                                BigDecimal(Random.nextInt()),
+                                Category.OUTCOME
+                            )
                         )
-                    )*/
-                }) {
-                    Text("Add")
+                    }) {
+                        Icon(Icons.Filled.Add, "Add new Expense")
+                    }
                 }
             }
 
-            items(viewModel.expenses.value.size) { index ->
-                ExpenseItem(viewModel.expenses.value[index]) {
-                    navigator.push(ExpenseScreen(it.id))
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(viewModel.expenses.value.size) { index ->
+                    ExpenseItem(viewModel.expenses.value[index]) {
+                        navigator.push(ExpenseScreen(it.id))
+                    }
                 }
             }
         }

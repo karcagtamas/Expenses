@@ -17,14 +17,15 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation(compose.material3)
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.transitions)
     implementation(libs.voyager.screenmodel)
     implementation(libs.voyager.koin)
     implementation(libs.koin.core)
+    implementation(libs.kotlinx.coroutines.swing)
 
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.android)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
 compose.desktop {
