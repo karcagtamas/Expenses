@@ -26,4 +26,10 @@ class HomeViewModel : ScreenModel {
             _expenses.value = _expenses.value.plus(expense)
         }
     }
+
+    fun edit(expense: Expense) {
+        screenModelScope.launch {
+            _expenses.value = _expenses.value.map { if (it.id != expense.id) it else expense }
+        }
+    }
 }

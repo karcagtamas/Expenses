@@ -1,8 +1,8 @@
 package models
 
-enum class Category {
+enum class Category(val displayName: String) {
 
-    INCOME,
-    OUTCOME,
-    DEPOSIT
+    INCOME("Income"),
+    OUTCOME("Outcome"),
+    DEPOSIT("Deposit");
 }

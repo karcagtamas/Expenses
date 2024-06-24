@@ -9,21 +9,27 @@ import models.Category
 import models.Expense
 import java.math.BigDecimal
 
-class EditViewModel(init: Expense) : ScreenModel {
+class EditViewModel(val init: Expense, val onSave: (Expense) -> Unit) : ScreenModel {
 
-    private var _expense = mutableStateOf(init)
+    private var _value = mutableStateOf(init.value)
+    private var _category = mutableStateOf(init.category)
 
-    var expense: State<Expense> = _expense
+    var value: State<BigDecimal> = _value
+    var category: State<Category> = _category
 
-    fun setValue(value: BigDecimal) {
+    fun setValue(newValue: BigDecimal) {
         screenModelScope.launch {
-            expense.value.value = value
+            _value.value = newValue
         }
     }
 
-    fun setCategory(category: Category) {
+    fun setCategory(newCategory: Category) {
         screenModelScope.launch {
-            expense.value.category = category
+            _category.value = newCategory
         }
+    }
+
+    fun save() {
+        onSave(Expense(init.id, _value.value, _category.value))
     }
 }
