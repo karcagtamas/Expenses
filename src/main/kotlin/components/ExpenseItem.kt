@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,17 +22,17 @@ import models.Expense
 
 @Composable
 fun ExpenseItem(expense: Expense, onEdit: (Expense) -> Unit, onClick: (Expense) -> Unit) {
-    val color = when (expense.category) {
-        Category.INCOME -> Color(21, 157, 21)
-        Category.OUTCOME -> Color(255, 26, 26)
-        else -> Color(0, 191, 255)
+    val categoryParams = when (expense.category) {
+        Category.INCOME -> Pair(Color(21, 157, 21), Icons.Filled.KeyboardArrowDown)
+        Category.OUTCOME -> Pair(Color(255, 26, 26), Icons.Filled.KeyboardArrowUp)
+        else -> Pair(Color(0, 191, 255), Icons.Filled.PlayArrow)
     }
 
     Box(
         modifier = Modifier
             .padding(4.dp)
             .clickable { onClick(expense) }
-            .background(color, RoundedCornerShape(12.dp))
+            .background(categoryParams.first, RoundedCornerShape(12.dp))
             .padding(12.dp, 2.dp)
             .fillMaxWidth(),
     ) {
@@ -38,11 +41,16 @@ fun ExpenseItem(expense: Expense, onEdit: (Expense) -> Unit, onClick: (Expense) 
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                "${expense.value.toPlainString()} ${Constants.CURRENCY}",
-                color = Color.White,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(imageVector = categoryParams.second, contentDescription = "Expense Icon", tint = Color.White)
+                Text(
+                    "${expense.value.toPlainString()} ${Constants.CURRENCY}",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+            }
             IconButton(
                 onClick = {
                     onEdit(expense)

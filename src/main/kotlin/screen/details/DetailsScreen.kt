@@ -17,7 +17,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import components.DataRow
+import components.DateDataRow
 import models.Expense
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 data class DetailsScreen(val expense: Expense) : Screen {
 
@@ -40,8 +43,10 @@ data class DetailsScreen(val expense: Expense) : Screen {
                 modifier = Modifier.padding(it).fillMaxWidth().padding(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                val expense = viewModel.expense.value
                 DataRow("Value", expense.value.toPlainString())
                 DataRow("Category", expense.category.displayName)
+                DateDataRow("Date", LocalDateTime.of(expense.date, LocalTime.of(0, 0, 0)))
             }
         }
     }

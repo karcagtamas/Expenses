@@ -18,10 +18,13 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import components.DateSelect
 import components.DropdownSelect
 import models.Category
 import models.Expense
 import java.math.BigDecimal
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 class EditScreen(val expense: Expense, val editing: Boolean, val onSave: (Expense) -> Unit) : Screen {
 
@@ -77,6 +80,13 @@ class EditScreen(val expense: Expense, val editing: Boolean, val onSave: (Expens
                     value = viewModel.category.value,
                     onValueChange = {
                         viewModel.setCategory(it)
+                    }
+                )
+                DateSelect(
+                    label = { Text("Date") },
+                    value = LocalDateTime.of(viewModel.date.value, LocalTime.MIDNIGHT),
+                    onValueChange = {
+                        viewModel.setDate(it.toLocalDate())
                     }
                 )
                 OutlinedButton(

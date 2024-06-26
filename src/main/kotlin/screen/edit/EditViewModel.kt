@@ -8,14 +8,17 @@ import kotlinx.coroutines.launch
 import models.Category
 import models.Expense
 import java.math.BigDecimal
+import java.time.LocalDate
 
 class EditViewModel(val init: Expense, val onSave: (Expense) -> Unit) : ScreenModel {
 
     private var _value = mutableStateOf(init.value)
     private var _category = mutableStateOf(init.category)
+    private var _date = mutableStateOf(init.date)
 
     var value: State<BigDecimal> = _value
     var category: State<Category> = _category
+    var date: State<LocalDate> = _date
 
     fun setValue(newValue: BigDecimal) {
         screenModelScope.launch {
@@ -29,7 +32,13 @@ class EditViewModel(val init: Expense, val onSave: (Expense) -> Unit) : ScreenMo
         }
     }
 
+    fun setDate(newDate: LocalDate) {
+        screenModelScope.launch {
+            _date.value = newDate
+        }
+    }
+
     fun save() {
-        onSave(Expense(init.id, _value.value, _category.value, init.date))
+        onSave(Expense(init.id, _value.value, _category.value, _date.value))
     }
 }
