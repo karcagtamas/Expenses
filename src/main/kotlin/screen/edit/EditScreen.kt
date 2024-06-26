@@ -1,5 +1,6 @@
 package screen.edit
 
+import Constants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,8 +58,8 @@ class EditScreen(val expense: Expense, val editing: Boolean, val onSave: (Expens
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedTextField(
-                    label = { Text("Value") },
-                    placeholder = { Text("Value") },
+                    label = { Text("Value (${Constants.CURRENCY})") },
+                    placeholder = { Text("Value (${Constants.CURRENCY})") },
                     value = viewModel.value.value.toPlainString(),
                     onValueChange = {
                         try {

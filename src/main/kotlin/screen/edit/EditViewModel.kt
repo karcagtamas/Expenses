@@ -30,6 +30,6 @@ class EditViewModel(val init: Expense, val onSave: (Expense) -> Unit) : ScreenMo
     }
 
     fun save() {
-        onSave(Expense(init.id, _value.value, _category.value))
+        onSave(Expense(init.id, _value.value, _category.value, init.date))
     }
 }
