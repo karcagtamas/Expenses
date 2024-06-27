@@ -9,6 +9,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,6 +19,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import components.DataRow
 import components.DateDataRow
+import models.Category
 import models.Expense
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -47,6 +49,14 @@ data class DetailsScreen(val expense: Expense) : Screen {
                 DataRow("Value", expense.value.toPlainString())
                 DataRow("Category", expense.category.displayName)
                 DateDataRow("Date", LocalDateTime.of(expense.date, LocalTime.of(0, 0, 0)))
+
+                if (expense.isPaidBack()) {
+                    Text("Deposit is payed back")
+                }
+
+                if (expense.isPayingBackDeposit()) {
+                    Text("Income is paying back a deposit")
+                }
             }
         }
     }

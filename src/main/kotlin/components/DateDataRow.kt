@@ -12,5 +12,5 @@ fun DateDataRow(
     trailing: String? = null,
     fontSize: TextUnit = TextUnit.Unspecified
 ) {
-    DataRow(caption, value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), trailing, fontSize)
+    DataRow(caption, value.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), trailing, fontSize)
 }

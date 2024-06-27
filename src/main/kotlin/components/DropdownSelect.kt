@@ -11,7 +11,8 @@ fun <T> DropdownSelect(
     options: List<T>,
     stringifier: (T) -> String,
     value: T,
-    onValueChange: (T) -> Unit
+    onValueChange: (T) -> Unit,
+    disabled: Boolean = false
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOption by remember { mutableStateOf(value) }
@@ -30,17 +31,20 @@ fun <T> DropdownSelect(
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            enabled = !disabled
         )
-        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            options.forEach { selection ->
-                DropdownMenuItem(
-                    text = { Text(stringifier(selection)) },
-                    onClick = {
-                        selectedOption = selection
-                        onValueChange(selection)
-                        expanded = false
-                    }
-                )
+        if (!disabled) {
+            ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                options.forEach { selection ->
+                    DropdownMenuItem(
+                        text = { Text(stringifier(selection)) },
+                        onClick = {
+                            selectedOption = selection
+                            onValueChange(selection)
+                            expanded = false
+                        }
+                    )
+                }
             }
         }
     }

@@ -20,7 +20,7 @@ fun DateSelect(label: @Composable () -> Unit, value: LocalDateTime, onValueChang
 
     OutlinedTextField(
         readOnly = true,
-        value = toLocalDateTime(state.selectedDateMillis)?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        value = toLocalDateTime(state.selectedDateMillis)?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             ?: "N/A",
         onValueChange = {},
         label = label,

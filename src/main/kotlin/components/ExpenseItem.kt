@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import models.Category
@@ -50,6 +51,15 @@ fun ExpenseItem(expense: Expense, onEdit: (Expense) -> Unit, onClick: (Expense) 
                     color = Color.White,
                     fontWeight = FontWeight.Bold
                 )
+                if (expense.isPaidBack()) {
+                    Text(
+                        "Paid back",
+                        fontStyle = FontStyle.Italic,
+                    )
+                }
+                if (expense.isPayingBackDeposit()) {
+                    Text("Pays back a deposit", fontStyle = FontStyle.Italic)
+                }
             }
             IconButton(
                 onClick = {

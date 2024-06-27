@@ -56,13 +56,15 @@ class HomeScreen : Screen {
                             Expense(
                                 UUID.randomUUID().toString(),
                                 BigDecimal(0),
-                                Category.INCOME,
-                                LocalDate.now()
+                                Category.INCOME
                             ),
-                            false
-                        ) {
-                            viewModel.add(it)
-                        }
+                            false,
+                            onSave = {
+                                viewModel.add(it)
+                            },
+                            onPayBack = {},
+                            onRemove = {}
+                        )
                     )
                 }) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
@@ -109,9 +111,13 @@ class HomeScreen : Screen {
                     items(orderedItems.size) { index ->
                         ExpenseItem(orderedItems[index], onEdit = {
                             navigator.push(
-                                EditScreen(it, true) {
+                                EditScreen(it, true, onSave = {
                                     viewModel.edit(it)
-                                }
+                                }, onPayBack = {
+                                    viewModel.payBack(it)
+                                }, onRemove = {
+                                    viewModel.remove(it)
+                                })
                             )
                         }) {
                             navigator.push(DetailsScreen(it))

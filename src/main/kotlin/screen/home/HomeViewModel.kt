@@ -9,6 +9,7 @@ import models.Category
 import models.Expense
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.util.UUID
 
 class HomeViewModel : ScreenModel {
 
@@ -31,6 +32,30 @@ class HomeViewModel : ScreenModel {
     fun edit(expense: Expense) {
         screenModelScope.launch {
             _expenses.value = _expenses.value.map { if (it.id != expense.id) it else expense }
+        }
+    }
+
+    fun payBack(expense: Expense) {
+        if (expense.connection == null && expense.category == Category.DEPOSIT) {
+            val newExpense =
+                Expense(UUID.randomUUID().toString(), expense.value, Category.INCOME, LocalDate.now(), expense.id)
+            expense.connection = newExpense.id
+            edit(expense)
+            add(newExpense)
+        }
+    }
+
+    fun remove(expense: Expense) {
+        screenModelScope.launch {
+            val connection = expense.connection
+            val removeOther = expense.category == Category.DEPOSIT
+            _expenses.value = _expenses.value.filter { it.id != expense.id && (!removeOther || it.id != connection) }.map {
+                if (it.id == connection) {
+                    it.connection = null
+                }
+
+                it
+            }
         }
     }
 

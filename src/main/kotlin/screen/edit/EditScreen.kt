@@ -1,10 +1,7 @@
 package screen.edit
 
 import Constants
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
@@ -25,8 +22,15 @@ import models.Expense
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.LocalTime
+import kotlin.math.exp
 
-class EditScreen(val expense: Expense, val editing: Boolean, val onSave: (Expense) -> Unit) : Screen {
+class EditScreen(
+    val expense: Expense,
+    val editing: Boolean,
+    val onSave: (Expense) -> Unit,
+    val onPayBack: (Expense) -> Unit,
+    val onRemove: (Expense) -> Unit,
+) : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -80,7 +84,8 @@ class EditScreen(val expense: Expense, val editing: Boolean, val onSave: (Expens
                     value = viewModel.category.value,
                     onValueChange = {
                         viewModel.setCategory(it)
-                    }
+                    },
+                    disabled = viewModel.hasConnection()
                 )
                 DateSelect(
                     label = { Text("Date") },
@@ -89,13 +94,40 @@ class EditScreen(val expense: Expense, val editing: Boolean, val onSave: (Expens
                         viewModel.setDate(it.toLocalDate())
                     }
                 )
-                OutlinedButton(
-                    onClick = {
-                        viewModel.save()
-                        navigator.pop()
-                    }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text("Save")
+                    FilledTonalButton(
+                        onClick = {
+                            viewModel.save()
+                            navigator.pop()
+                        }
+                    ) {
+                        Text("Save")
+                    }
+
+                    if (viewModel.canPayBack()) {
+                        OutlinedButton(
+                            onClick = {
+                                onPayBack(expense)
+                                navigator.pop()
+                            }
+                        ) {
+                            Text("Paid Back")
+                        }
+                    }
+
+                    if (editing) {
+                        OutlinedButton(
+                            onClick = {
+                                onRemove(expense)
+                                navigator.pop()
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                        ) {
+                            Text("Remove")
+                        }
+                    }
                 }
             }
         }

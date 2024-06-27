@@ -41,4 +41,16 @@ class EditViewModel(val init: Expense, val onSave: (Expense) -> Unit) : ScreenMo
     fun save() {
         onSave(Expense(init.id, _value.value, _category.value, _date.value))
     }
+
+    fun canPayBack(): Boolean {
+        return init.category == Category.DEPOSIT && !isPaidBack()
+    }
+
+    fun isPaidBack(): Boolean {
+        return init.category == Category.DEPOSIT && init.connection != null
+    }
+
+    fun hasConnection(): Boolean {
+        return init.connection != null
+    }
 }
