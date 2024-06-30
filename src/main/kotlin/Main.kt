@@ -12,6 +12,7 @@ import org.koin.dsl.module
 import repositories.ExpenseRepository
 import repositories.ExpenseRepositoryImpl
 import screen.home.HomeScreen
+import screen.home.HomeViewModel
 import ui.theme.AppTheme
 
 @Composable
@@ -42,6 +43,10 @@ fun initKoin() {
             databaseModule,
             module {
                 single<ExpenseRepository> { ExpenseRepositoryImpl(get()) }
+
+                factory {
+                    HomeViewModel(get())
+                }
             }
         )
     }

@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import components.DataRow
@@ -25,7 +27,6 @@ import models.Expense
 import screen.details.DetailsScreen
 import screen.edit.EditScreen
 import java.math.BigDecimal
-import java.time.LocalDate
 import java.util.*
 
 class HomeScreen : Screen {
@@ -35,7 +36,7 @@ class HomeScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-        val viewModel = rememberScreenModel { HomeViewModel() }
+        val viewModel = koinScreenModel<HomeViewModel>()
 
         Scaffold(
             topBar = {

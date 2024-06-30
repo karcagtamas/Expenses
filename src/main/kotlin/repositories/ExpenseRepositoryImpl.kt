@@ -14,4 +14,22 @@ class ExpenseRepositoryImpl(private val database: AppDatabase) : ExpenseReposito
             .asFlow()
             .mapToList(Dispatchers.IO)
     }
+
+    override suspend fun insert(expense: ExpenseEntry) {
+        database.expenseQueries.insertItem(expense)
+    }
+
+    override suspend fun update(expense: ExpenseEntry) {
+        database.expenseQueries.updateItem(
+            expense.value_,
+            expense.category,
+            expense.date,
+            expense.connection,
+            expense.id
+        )
+    }
+
+    override suspend fun delete(expense: ExpenseEntry) {
+        database.expenseQueries.deleteItem(expense.id)
+    }
 }

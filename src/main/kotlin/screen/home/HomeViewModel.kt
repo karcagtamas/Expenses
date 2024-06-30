@@ -1,17 +1,18 @@
 package screen.home
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.launch
 import models.Category
 import models.Expense
+import repositories.ExpenseRepository
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
-class HomeViewModel() : ScreenModel {
+class HomeViewModel(val expenseRepository: ExpenseRepository) : ScreenModel {
 
     private var _expenses = mutableStateOf(emptyList<Expense>())
 
@@ -19,19 +20,27 @@ class HomeViewModel() : ScreenModel {
 
     init {
         screenModelScope.launch {
-            _expenses.value = listOf(Expense("alma", BigDecimal(12), Category.INCOME, LocalDate.now()))
+            expenseRepository.getAll().collect {
+                _expenses.value = it.map {
+                    Expense.fromEntry(it)
+                }
+            }
         }
     }
 
     fun add(expense: Expense) {
         screenModelScope.launch {
             _expenses.value = _expenses.value.plus(expense)
+            expenseRepository.insert(
+                expense.toEntry()
+            )
         }
     }
 
     fun edit(expense: Expense) {
         screenModelScope.launch {
             _expenses.value = _expenses.value.map { if (it.id != expense.id) it else expense }
+            expenseRepository.update(expense.toEntry())
         }
     }
 
@@ -49,12 +58,22 @@ class HomeViewModel() : ScreenModel {
         screenModelScope.launch {
             val connection = expense.connection
             val removeOther = expense.category == Category.DEPOSIT
-            _expenses.value = _expenses.value.filter { it.id != expense.id && (!removeOther || it.id != connection) }.map {
-                if (it.id == connection) {
-                    it.connection = null
+
+            val other = _expenses.value.filter { it.id == connection }.firstOrNull()
+
+            _expenses.value =
+                _expenses.value.filter { it.id != expense.id && (!removeOther || it.id != connection) }.map {
+                    if (it.id == connection) {
+                        it.connection = null
+                    }
+
+                    it
                 }
 
-                it
+            expenseRepository.delete(expense.toEntry())
+
+            if (removeOther && other != null) {
+                expenseRepository.delete(expense.toEntry())
             }
         }
     }

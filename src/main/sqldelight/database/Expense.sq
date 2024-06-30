@@ -18,3 +18,12 @@ SELECT * FROM expenseEntry ORDER BY id;
 
 deleteItem:
 DELETE FROM expenseEntry WHERE id = ?;
+
+updateItem:
+UPDATE expenseEntry
+SET
+value = ?,
+category = ?,
+date = ?,
+connection = ?
+WHERE id = ?;
