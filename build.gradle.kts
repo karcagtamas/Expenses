@@ -4,6 +4,7 @@ plugins {
     kotlin("jvm")
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.sqldelight)
 }
 
 group = "eu.karcags"
@@ -25,6 +26,10 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.kotlinx.coroutines.swing)
 
+    implementation(libs.sqldelight.driver)
+    implementation(libs.sqldelight.runtime)
+    implementation(libs.sqldelight.coroutines)
+
     testImplementation(libs.kotlinx.coroutines.test)
 }
 
@@ -36,6 +41,14 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Expenses"
             packageVersion = "1.0.0"
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("database")
         }
     }
 }

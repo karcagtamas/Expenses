@@ -1,0 +1,20 @@
+CREATE TABLE expenseEntry (
+    id TEXT NOT NULL PRIMARY KEY,
+    value INTEGER NOT NULL,
+    category INTEGER NOT NULL,
+    date REAL NOT NULL,
+    connection TEXT
+);
+
+CREATE INDEX expense_id ON expenseEntry(id);
+
+insertItem:
+INSERT OR REPLACE
+INTO expenseEntry (id, value, category, date, connection)
+VALUES ?;
+
+getAll:
+SELECT * FROM expenseEntry ORDER BY id;
+
+deleteItem:
+DELETE FROM expenseEntry WHERE id = ?;

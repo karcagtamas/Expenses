@@ -11,7 +11,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.UUID
 
-class HomeViewModel : ScreenModel {
+class HomeViewModel() : ScreenModel {
 
     private var _expenses = mutableStateOf(emptyList<Expense>())
 

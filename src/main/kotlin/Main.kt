@@ -2,12 +2,15 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
+import di.databaseModule
 import org.koin.core.context.startKoin
+import org.koin.dsl.module
+import repositories.ExpenseRepository
+import repositories.ExpenseRepositoryImpl
 import screen.home.HomeScreen
 import ui.theme.AppTheme
 
@@ -35,7 +38,12 @@ fun main() = application {
 
 fun initKoin() {
     startKoin {
-        modules()
+        modules(
+            databaseModule,
+            module {
+                single<ExpenseRepository> { ExpenseRepositoryImpl(get()) }
+            }
+        )
     }
 }
 
